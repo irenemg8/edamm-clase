@@ -191,3 +191,10 @@
  height: 500px;  /*si tengo en app.jsx un ancho y alto, aunque aquí lo mencione, lo que se verá será la imagen estrechada*/
  width: 300px;
 }
+
+.media-box {
+ width: 480px;
+ height: 270px;
+ border-radius: 6px;
+ background-color: #000;
+}
