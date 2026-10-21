@@ -5,25 +5,52 @@ export default function App() {
   const canvasRef = useRef(null);  //canvasRef.current = null;
 
   useEffect(() => {
-  // 1. Obtenemos el elemento del DOM a través de la referencia
-  const canvas = canvasRef.current;
-  if (!canvas) return;
+ const canvas = canvasRef.current;
+ if (!canvas) return;
+ const ctx = canvas.getContext('2d');
+ // 1. Variables de estado gráfico (viven fuera del ciclo de render de React)
+ let x = 50;
+ let speedX = 3;
+ const rectWidth = 100;
+ const rectHeight = 80;
+ let animationFrameId;
+ // 2. Definición del bucle de renderizado continuo
+ function render() {
+ // PASO A: Limpieza del fotograma anterior (evita el efecto "estela")
+ ctx.fillStyle = '#1e293b';
+ //ctx.fillRect(0, 0, canvas.width, canvas.height);
+ // PASO B: Actualización de la física / posición
+ x += speedX;
+ // Detección de colisión con los bordes izquierdo y derecho
+ if (x + rectWidth >= canvas.width || x <= 0) {
+speedX = -speedX; // Invertir dirección
+ }
+ // PASO C: Dibujado de los elementos en su nueva posición
+ ctx.fillStyle = '#38bdf8';
+ ctx.fillRect(x, 140, rectWidth, rectHeight);
+ // Texto informativo en pantalla
+ ctx.fillStyle = '#94a3b8';
+ ctx.font = '14px monospace';
+ ctx.fillText(`Posición X: ${Math.round(x)}px`, 20, 30);
+ ctx.fillText('Bucle activo con requestAnimationFrame', 20, 50);
+ 
+ const img = new Image();
+ img.src = '/favicon.svg';
+ if(img.complete) {
+  ctx.drawImage(img, 5, canvas.height - 25, 20, 20);
+ }
+ // PASO D: Solicitar al navegador el siguiente refresco de pantalla
+ animationFrameId = requestAnimationFrame(render);
+ }
+ // 3. Arrancar el bucle
+ animationFrameId = requestAnimationFrame(render);
+ // 4. FUNCIÓN DE LIMPIEZA: Cancela el bucle si el componente se desmonta
+ return () => {
+ cancelAnimationFrame(animationFrameId);
+ };
+ }, []);
 
-  // 2. Solicitamos el contexto de dibujo 2D
-  const contexto = canvas.getContext('2d');
-  // 3. Dibujamos una figura básica para verificar el funcionamiento
-  // Fondo general del lienzo
-  contexto.fillStyle = '#1e293b'; // Slate oscuro
-  contexto.fillRect(0, 0, canvas.width, canvas.height);
-  // Rectángulo de prueba en coordenadas (x: 50, y: 50, w: 100, h: 80)
-  contexto.fillStyle = '#38bdf8'; // Azul claro
-  contexto.fillRect(50, 50, 100, 80);
-  // Texto demostrativo
-  contexto.fillStyle = '#ffffff';
-  contexto.font = '16px sans-serif';
-  contexto.fillText('Canvas 2D Inicializado', 50, 160);
-  }, []); // Array vacío: se ejecuta una sola vez tras el primer render
-  
+
     return (
       <>
         <canvas 
