@@ -1,0 +1,36 @@
+{
+    "name": "Actividad EDAMM",
+    "short_name": "EDAMM",
+    "start_url": "/",
+    "display": "standalone",
+    "icons": [
+        {
+            "src": "/icon-192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+
+    "background_color": "#ffffff",
+    "theme_color": "#000000",
+
+   "shortcuts": [
+        {
+            "name": "Reproducción Rápida",
+            "short_name": "Play",
+            "description": "Lanza directamente el canal de audio en directo",
+            "url": "/?action=quickplay",
+            "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+        },
+        {
+            "name": "Ver Novedades",
+            "url": "/?action=latest",
+            "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+        }
+    ]
+}

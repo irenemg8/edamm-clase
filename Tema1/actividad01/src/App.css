@@ -1,0 +1,83 @@
+/* =====================================================================
+   CSS ANTERIOR (queda comentado para no perderlo)
+   =====================================================================
+
+.catalog-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.catalog-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+   ===================================================================== */
+
+
+/* ============================ MÓVIL (por defecto) ============================
+   Los botones salen en la misma fila y los vídeos debajo. */
+
+.catalog-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+header {
+  text-align: center;
+}
+
+/* Los botones, en la misma fila */
+nav {
+  display: flex;
+  flex-wrap: wrap;          /* si no caben, bajan a la fila siguiente */
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Rejilla de tarjetas (los "vídeos"), debajo de los botones.
+   auto-fill + minmax: se adapta sola al ancho disponible (responsive). */
+.catalog-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+
+/* ======================= ESCRITORIO (ancho >= 768px) =======================
+   Botones a la izquierda, uno debajo de otro, y los vídeos a la derecha. */
+
+@media (min-width: 768px) {
+  .catalog-container {
+    display: grid;
+    /* columna izquierda (botones) | columna derecha (vídeos) */
+    grid-template-columns: 220px 1fr;
+    grid-template-areas:
+      "header header"
+      "nav    list";
+    gap: 20px;
+    align-items: start;
+  }
+
+  header {
+    grid-area: header;
+    text-align: left;
+  }
+
+  nav {
+    grid-area: nav;
+    flex-direction: column;   /* botones uno debajo de otro */
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+  }
+
+  .catalog-list {
+    grid-area: list;
+    margin-top: 0;
+  }
+}

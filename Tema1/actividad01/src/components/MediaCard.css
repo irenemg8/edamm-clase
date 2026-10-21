@@ -1,0 +1,42 @@
+.media-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #780000;
+  color: #ffffff;
+  border: 6px solid transparent;
+}
+
+.media-card:hover {
+  border-color: #15ff00;
+}
+
+
+/* Imagen de la carátula */
+.media-cover {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  display: block;
+}
+
+/* Contenedor de metadatos */
+.media-metadata {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.media-metadata h1 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.media-metadata p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #a0a0a0;
+}

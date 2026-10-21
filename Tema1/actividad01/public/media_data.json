@@ -1,0 +1,5 @@
+[
+  { "id": "m1", "title": "Peliculón", "description": "La mejor del mundo", "duration": 120, "coverUrl": "https://placehold.co/300x180/1a1a1a/ffffff?text=Vídeo+1" },
+  { "id": "m2", "title": "Una pelicula", "description": "Esto es una peli", "duration": 80, "coverUrl": "https://placehold.co/300x180/1a1a1a/ffffff?text=Vídeo+2" },
+  { "id": "m3", "title": "Otra peli", "description": "Esto es otra peli", "duration": 100, "coverUrl": "https://placehold.co/300x180/1a1a1a/ffffff?text=Vídeo+3" }
+]
