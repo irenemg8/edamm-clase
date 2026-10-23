@@ -1,105 +1,86 @@
 import { useRef, useEffect } from "react";
 import "./App.css";
 export default function App() {
-  const bgVideoRef = useRef(null);
-  const fgVideoRef = useRef(null);
   const canvasRef = useRef(null);
+  // Usamos una referencia para saber si el usuario está pulsando el botón del ratón
+  // (useRef evita re-renderizados innecesarios de React mientras se dibuja)
+  const isDrawingRef = useRef(false);
   useEffect(() => {
-    const bgVideo = bgVideoRef.current;
-    const fgVideo = fgVideoRef.current;
     const canvas = canvasRef.current;
-    if (!bgVideo || !fgVideo || !canvas) return;
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    // 1. LIENZO EN MEMORIA (Offscreen / Scratchpad Canvas)
-    // No está en el DOM. Sirve exclusivamente como mesa de trabajo intermedia.
-    const offscreenCanvas = document.createElement("canvas");
-    offscreenCanvas.width = canvas.width;
-    offscreenCanvas.height = canvas.height;
-    const offscreenCtx = offscreenCanvas.getContext("2d", {
-      willReadFrequently: true,
-    });
-    let animationFrameId;
-    function render() {
-      // Comprobar que ambos vídeos tienen fotogramas listos
-      if (bgVideo.readyState >= 2 && fgVideo.readyState >= 2) {
-        const w = canvas.width;
-        const h = canvas.height;
-        // PASO 1: Volcar el vídeo del croma en el lienzo auxiliar
-        offscreenCtx.drawImage(fgVideo, 0, 0, w, h);
-        // PASO 2: Extraer píxeles del croma y aplicar el filtro
-        const frame = offscreenCtx.getImageData(0, 0, w, h);
-        const data = frame.data;
-        for (let i = 0; i < data.length; i += 4) {
-          const r = data[i];
-          const g = data[i + 1];
-          const b = data[i + 2];
-          // Algoritmo de detección de verde:
-          // El verde debe ser predominante y superar un mínimo de intensidad
-          if (g > 90 && g > r * 1.3 && g > b * 1.3) {
-            data[i + 3] = 0; // Canal Alfa a 0 = Completamente transparente
-          }
-        }
-        // PASO 3: Devolver los píxeles con transparencia al lienzo auxiliar
-        offscreenCtx.putImageData(frame, 0, 0);
-        // PASO 4: Composición en el Canvas Principal
-        // A) Dibujamos el fondo
-        ctx.drawImage(bgVideo, 0, 0, w, h);
-        // B) Dibujamos encima el lienzo auxiliar procesado
-        // (drawImage respeta el canal alfa y funde ambas capas)
-        ctx.drawImage(offscreenCanvas, 0, 0, w, h);
-      }
-      animationFrameId = requestAnimationFrame(render);
+    // 1. Configuración de estilo del trazo
+    ctx.strokeStyle = "#38bdf8"; // Color cian
+    ctx.lineWidth = 4;
+    ctx.lineCap = "round"; // Extremos redondeados para trazos fluidos
+    ctx.lineJoin = "round"; // Uniones suaves en esquinas
+    // Fondo inicial oscuro
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    // 2. Función para traducir coordenadas del evento de ventana al buffer del Canvas
+    function getCanvasCoords(event) {
+      const rect = canvas.getBoundingClientRect();
+      // Factor de escala entre el tamaño CSS en pantalla y la resolución interna real
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      return {
+        x: (event.clientX - rect.left) * scaleX,
+        y: (event.clientY - rect.top) * scaleY,
+      };
     }
-    animationFrameId = requestAnimationFrame(render);
+    // 3. Manejadores de eventos de puntero (Mouse / Stylus / Touch)
+    function handlePointerDown(event) {
+      isDrawingRef.current = true;
+      const { x, y } = getCanvasCoords(event);
+      // Iniciamos un nuevo sub-trazado vectorial
+      ctx.beginPath();
+      ctx.moveTo(x, y);
+    }
+    function handlePointerMove(event) {
+      if (!isDrawingRef.current) return;
+      const { x, y } = getCanvasCoords(event);
+      // Trazamos una línea hasta la nueva posición y la pintamos
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+    function handlePointerUp() {
+      isDrawingRef.current = false;
+      ctx.closePath();
+    }
+    // Usamos eventos de tipo 'pointer' para compatibilidad con ratón, lápiz óptico y táctil
+    canvas.addEventListener("pointerdown", handlePointerDown);
+    window.addEventListener("pointermove", handlePointerMove);
+    window.addEventListener("pointerup", handlePointerUp);
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      canvas.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointermove", handlePointerMove);
+      window.removeEventListener("pointerup", handlePointerUp);
     };
   }, []);
-  // Función auxiliar para pausar o reproducir ambos a la vez
-  const togglePlay = () => {
-    if (bgVideoRef.current.paused) {
-      bgVideoRef.current.play();
-      fgVideoRef.current.play();
-    } else {
-      bgVideoRef.current.pause();
-      fgVideoRef.current.pause();
-    }
+
+  // 4. Función de borrado completo
+  const handleClear = () => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    // fillRect sobreescribe todo el bitmap con el color de fondo
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
   };
   return (
     <main className="container">
-      <h1>Composición Chroma Key en Tiempo Real</h1>
-      <button onClick={togglePlay} className="btn-play">
-        Play / Pause Ambos Vídeos
-      </button>
-      {/* Canvas final con la mezcla */}
-      <div className="canvas-wrapper">
-        <canvas ref={canvasRef} width={640} height={360} />
+      <h1>Pizarra Interactiva en Canvas 2D</h1>
+      <div className="toolbar">
+        <button onClick={handleClear} className="btn-clear">
+          Borrar Canvas
+        </button>
       </div>
-      {/* Vídeos fuente (ocultos o reducidos como monitores de depuración) */}
-      <div className="debug-sources">
-        <div>
-          <p>Fondo (Background)</p>
-          <video
-            ref={bgVideoRef}
-            src="/wingit.mp4"
-            loop
-            muted
-            playsInline
-            width={240}
-          />
-        </div>
-        <div>
-          <p>Green Screen</p>
-          <video
-            ref={fgVideoRef}
-            src="/chroma.mp4"
-            loop
-            muted
-            playsInline
-            width={240}
-          />
-        </div>
-      </div>
+      <canvas
+        ref={canvasRef}
+        width={640}
+        height={360}
+        className="canvas-view"
+      />
     </main>
   );
 }
