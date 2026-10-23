@@ -11,6 +11,7 @@
   &:hover {
     border-color: var(--accent-border);
   }
+
   &:focus-visible {
     outline: 2px solid var(--accent);
     outline-offset: 2px;
@@ -42,8 +43,7 @@
     z-index: 1;
     top: 34px;
     height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
+    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg) scale(1.4);
   }
 
   .vite {
@@ -51,8 +51,7 @@
     top: 107px;
     height: 26px;
     width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
+    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg) scale(0.8);
   }
 }
 
@@ -75,9 +74,10 @@
   border-top: 1px solid var(--border);
   text-align: left;
 
-  & > div {
+  &>div {
     flex: 1 1 0;
     padding: 32px;
+
     @media (max-width: 1024px) {
       padding: 24px 20px;
     }
@@ -130,6 +130,7 @@
     &:hover {
       box-shadow: var(--shadow);
     }
+
     .button-icon {
       height: 18px;
       width: 18px;
@@ -156,6 +157,7 @@
 #spacer {
   height: 88px;
   border-top: 1px solid var(--border);
+
   @media (max-width: 1024px) {
     height: 48px;
   }
@@ -177,6 +179,7 @@
     left: 0;
     border-left-color: var(--border);
   }
+
   &::after {
     right: 0;
     border-right-color: var(--border);
@@ -184,17 +187,52 @@
 }
 
 .canvas-view {
- margin: 50px;
- border: 2px solid #334155;
- border-radius: 8px;
- box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
- height: 500px;  /*si tengo en app.jsx un ancho y alto, aunque aquí lo mencione, lo que se verá será la imagen estrechada*/
- width: 300px;
+  margin: 50px;
+  border: 2px solid #334155;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  height: 500px;
+  /*si tengo en app.jsx un ancho y alto, aunque aquí lo mencione, lo que se verá será la imagen estrechada*/
+  width: 300px;
 }
 
 .media-box {
- width: 480px;
- height: 270px;
- border-radius: 6px;
- background-color: #000;
+  width: 480px;
+  height: 270px;
+  border-radius: 6px;
+  background-color: #000;
+}
+
+
+.btn-play {
+  background-color: #10b981;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.btn-play:hover {
+  background-color: #059669;
+}
+
+.canvas-wrapper {
+  margin-bottom: 20px;
+}
+
+.debug-sources {
+  display: flex;
+  gap: 20px;
+  background: #1e293b;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.debug-sources p {
+  margin: 0 0 8px 0;
+  font-size: 13px;
+  color: #94a3b8;
 }
