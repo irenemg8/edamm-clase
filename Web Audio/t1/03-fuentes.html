@@ -1,0 +1,15 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>03 · Fuentes</title><link rel="stylesheet" href="./src/style.css"></head>
+<body><main>
+<h1>03 · Media element y micrófono</h1>
+<h2>Actividad 03: pista larga mediante &lt;audio&gt; y entrada en vivo mediante getUserMedia</h2>
+<div class="row">
+  <audio id="track" src="./samples/loop.wav" controls loop crossorigin="anonymous"></audio>
+  <button id="wrap">Meter el &lt;audio&gt; en el grafo</button>
+</div>
+<div class="row">
+  <button id="mic">Micrófono → salida (ganancia 0.1)</button>
+  <label>Ganancia mic <input id="micGain" type="range" min="0" max="0.5" step="0.01" value="0.1"></label>
+</div>
+<p class="tip">Sin <code>crossorigin</code> y cabeceras CORS, un &lt;audio&gt; de otro origen se reproduce, pero el nodo entrega silencio.</p>
+<script type="module" src="./src/03-fuentes.ts"></script>
+</main></body></html>

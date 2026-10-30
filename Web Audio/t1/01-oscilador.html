@@ -1,0 +1,15 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>01 · Oscilador</title><link rel="stylesheet" href="./src/style.css"></head>
+<body><main>
+<h1>01 · Oscilador + ganancia</h1>
+<h2>Actividad 01: control de frecuencia, forma de onda, Parar/Tocar; ampliación: dos osciladores desafinados</h2>
+<div class="row">
+  <button id="play">Tocar</button>
+  <button id="stop" disabled>Parar</button>
+  <label>Frecuencia <input id="freq" type="range" min="110" max="880" value="440"></label>
+  <label>Onda <select id="type"><option>sine</option><option>square</option><option>sawtooth</option><option>triangle</option></select></label>
+</div>
+<p class="tip">Estado del contexto: <span id="state">—</span></p>
+<pre>const osc = ctx.createOscillator(); const gain = ctx.createGain();
+osc.connect(gain).connect(ctx.destination);</pre>
+<script type="module" src="./src/01-oscilador.ts"></script>
+</main></body></html>

@@ -1,0 +1,14 @@
+<!doctype html><html lang="es"><head><meta charset="UTF-8"><title>04 · Secuenciador</title><link rel="stylesheet" href="./src/style.css"></head>
+<body><main>
+<h1>04 · Secuenciador de 8 pasos</h1>
+<h2>Actividad 04: segunda pista, cambio de patrón durante la reproducción, resaltado del paso en curso desde rAF, ampliación: swing</h2>
+<div class="row">
+  <button id="toggle">Start</button>
+  <label>BPM <input id="bpm" type="range" min="60" max="180" value="120"> <span id="bpmv">120</span></label>
+  <label><input id="naive" type="checkbox"> sin look-ahead (setTimeout)</label>
+</div>
+<div class="grid" id="kick"></div>
+<!-- TODO 1: <div class="grid" id="snare"></div> -->
+<p class="tip">Con la CPU limitada en el panel Performance de DevTools, la temporización con look-ahead no se ve afectada.</p>
+<script type="module" src="./src/04-secuenciador.ts"></script>
+</main></body></html>
