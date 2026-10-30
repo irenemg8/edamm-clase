@@ -18,8 +18,14 @@ async function load(name: string): Promise<AudioBuffer> {
 function trigger(buffer: AudioBuffer, when = 0) {
   const src = ctx!.createBufferSource();       // nuevo cada vez
   src.buffer = buffer;
-  src.playbackRate.value = +rate.value;
+  // Transposición en semitonos: n semitonos ≡ playbackRate = 2^(n/12)
+  // (el slider es logarítmico, no lineal: 12 semitonos = octava = velocidad doble)
+  src.playbackRate.value = Math.pow(2, +rate.value / 12);
   src.loop = loop.checked;
+  if (src.loop) {                              // delimitar el fragmento que se repite
+    src.loopStart = 0;     // s
+    src.loopEnd = 0.1;     // s: se repiten los primeros 100 ms
+  }
   src.connect(ctx!.destination);
   src.start(when);
   if (loop.checked) src.stop(ctx!.currentTime + 2);   // no dejar loops infinitos en la demo
